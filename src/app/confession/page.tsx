@@ -1,21 +1,25 @@
 'use client';
-import yuah from "@/assets/yuah.png";
+import yura from "@/assets/yuah.png";
+import suho from "@/assets/suho.png";
+import jiwoo from "@/assets/jiwoo.png";
+import doah from "@/assets/doah.png";
+import donggu from "@/assets/donggu.png";
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styled, { keyframes, css } from 'styled-components';
 import { confessionSchema, type ConfessionFormData } from '@/lib/validation';
 import { submitConfession } from '@/shares/axios';
 import { useSequentialTyping, type ParsedMessage, type RenderedMessage } from '@/hooks/useSequentialTyping';
-
+import Image from "next/image";
 const FRIENDS = [
-  { profile: yuah, name: 'Friend 1' },
-  { profile: '🔥', name: 'Friend 2' },
-  { profile: '💀', name: 'Friend 3' },
-  { profile: '🤡', name: 'Friend 4' },
-  { profile: '👹', name: 'Friend 5' },
+  { profile: yura, name: '차유라' },
+  { profile: suho, name: '김수호' },
+  { profile: jiwoo, name: '임지우' },
+  { profile: doah, name: '김도아' },
+  { profile: donggu, name: '강동구' },
 ];
 
-const FRIEND_COLORS = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#dfe6e9'];
+const FRIEND_COLORS = ['#e7f59b', '#9da5eb', '#adb65b', '#cea0f3', '#d4ddd6'];
 
 // Animations
 const fadeIn = keyframes`
@@ -100,9 +104,16 @@ const FriendAvatar = styled.div<{ $color: string; $active?: boolean }>`
   font-size: 1.5rem;
   transition: all ${({ theme }) => theme.transitions.fast};
   animation: ${({ $active }) => ($active ? bounce : 'none')} 0.5s ease infinite;
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
   &:hover {
     transform: scale(1.1);
-    border-color: ${({ $color }) => $color};
+    border-color: white;
   }
 `;
 
@@ -188,7 +199,7 @@ const TypingBubble = styled.div<{ $friendIndex: number }>`
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: ${({ $friendIndex }) => FRIEND_COLORS[$friendIndex] + '22'};
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -368,7 +379,9 @@ function parseResponse(answer: string): ParsedMessage[] {
 function TypingIndicator({ friendIndex }: { friendIndex: number }) {
   return (
     <TypingBubble $friendIndex={friendIndex}>
-      <div className="avatar">{FRIENDS[friendIndex].profile}</div>
+      <div className="avatar">
+        <Image src={FRIENDS[friendIndex].profile} width={36} height={36}  alt="프로필사진"/>
+      </div>
       <div className="content">
         <span className="dot" />
         <span className="dot" />
@@ -395,7 +408,9 @@ function ChatMessage({ message }: { message: RenderedMessage }) {
 
   return (
     <MessageBubble $friendIndex={message.friendIndex} $pop={pop}>
-      <div className="avatar">{FRIENDS[message.friendIndex].profile}</div>
+      <div className="avatar">
+        <Image src={FRIENDS[message.friendIndex].profile} width={36} height={36}  alt="프로필사진"/>
+      </div>
       <div className="content">
         <div className="name">{FRIENDS[message.friendIndex].name}</div>
         <div className="text">
@@ -482,7 +497,9 @@ export default function ConfessionPage() {
       <FriendsBar>
         {FRIENDS.map((friend, i) => (
           <FriendAvatar key={i} $color={FRIEND_COLORS[i]} $active={currentTypingFriendIndex === i} title={friend.name}>
-            {friend.profile}
+            <div className="avatar">
+              <Image src={friend.profile} width={48} height={48}  alt="프로필사진"/>
+            </div>
           </FriendAvatar>
         ))}
       </FriendsBar>
