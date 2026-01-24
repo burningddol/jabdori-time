@@ -1,16 +1,16 @@
-
 import axios from "axios";
+import type { ConfessionFormData } from "@/lib/validation";
 
 const api = axios.create({
   baseURL: "/api",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: false,
+  headers: { "Content-Type": "application/json" },
 });
 
-export async function getAnswer(): Promise<string> {
-  const res = await api.get(""); 
+export interface ConfessionResponse {
+  answer: string;
+}
 
-  return res.data.answer;
+export async function submitConfession(payload: ConfessionFormData): Promise<ConfessionResponse> {
+  const res = await api.post("", payload);
+  return res.data;
 }
