@@ -33,7 +33,7 @@ export function FriendProfileModal({ friendIndex, onClose }: Props) {
         </ModalCloseButton>
 
         <ModalProfileImage>
-          <Image src={friend.profile} fill alt={`${friend.name} 프로필`} />
+          <Image src={friend.profile} fill alt={`${friend.name} 프로필`} priority />
         </ModalProfileImage>
 
         <ModalName id="modal-title">{friend.name}</ModalName>
