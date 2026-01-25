@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styled, { keyframes } from 'styled-components';
+import Link from 'next/link';
 
 const SPEECH_BUBBLES = [
   "공부하기로 해놓고 또 안 했다구요?!",
@@ -152,7 +153,6 @@ export default function LandingPage() {
   const [visibleBubbles, setVisibleBubbles] = useState<number[]>([]);
 
   useEffect(() => {
-    // Show bubbles one by one with staggered timing
     SPEECH_BUBBLES.forEach((_, index) => {
       setTimeout(() => {
         setVisibleBubbles((prev) => [...prev, index]);
@@ -160,9 +160,7 @@ export default function LandingPage() {
     });
   }, []);
 
-  const handleConfess = () => {
-    router.push('/confession');
-  };
+
 
   return (
     <Container>
@@ -184,9 +182,11 @@ export default function LandingPage() {
         ))}
       </BubblesContainer>
 
-      <CTAButton onClick={handleConfess}>
-        잡도리 타임
-      </CTAButton>
+      <Link href="/confession" prefetch>
+        <CTAButton>
+          잡도리 타임
+        </CTAButton>
+      </Link> 
 
       <Subtitle>
         당신의 친절한 5명의 친구가 기다리고 있어요
