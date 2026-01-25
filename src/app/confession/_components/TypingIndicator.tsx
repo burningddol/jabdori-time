@@ -18,7 +18,9 @@ export function TypingIndicator({ friendIndex, onAvatarClick }: Props) {
         onClick={() => onAvatarClick?.(friendIndex)}
         aria-label={`${friend.name} 프로필 보기`}
       >
-        <Image src={friend.profile} width={36} height={36} alt={`${friend.name} 프로필`} />
+        <div className="imgWrapper">
+          <Image src={friend.profile} width={36} height={36} alt={`${friend.name} 프로필`} />
+        </div>
       </ChatAvatarButton>
       <div className="content">
         <span className="dot" />

@@ -58,7 +58,6 @@ export const FriendsBarWrapper = styled.div`
 
 export const ChatArea = styled.div`
   flex: 1;
-  overflow-y: auto;
   padding: ${({ theme }) => theme.spacing.md} 0;
   display: flex;
   flex-direction: column;
@@ -89,6 +88,7 @@ export const MessageBubble = styled.div<{
   $pop?: boolean;
 }>`
   display: flex;
+  
   gap: ${({ theme }) => theme.spacing.sm};
   align-items: flex-start;
   animation: ${fadeInSlide} 0.3s ease;
@@ -244,10 +244,8 @@ export const FriendAvatarButton = styled.button<{ $color: string; $active?: bool
 `;
 
 export const ChatAvatarButton = styled.button`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  overflow: hidden;
+  
+  
   border: none;
   padding: 0;
   cursor: pointer;
@@ -261,6 +259,12 @@ export const ChatAvatarButton = styled.button`
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 2px;
+  }
+   .imgWrapper {
+    width:36px;
+    height:36px;
+    border-radius: 50%;
+  overflow: hidden;
   }
 `;
 
