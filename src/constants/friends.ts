@@ -50,3 +50,18 @@ export const FRIENDS: Friend[] = [
 ];
 
 export const FRIEND_COLORS = ['#e7f59b', '#9da5eb', '#adb65b', '#cea0f3', '#d4ddd6'] as const;
+
+import type { VoiceProfile } from '@/lib/tts';
+
+export const VOICE_PROFILES: VoiceProfile[] = [
+  // 차유라
+  { rate: 1.45, pitch: 2.5, volume: 0.8, lang: 'ko-KR', nameHints: ['female', 'woman', '여성', '여자', 'heami']},
+  // 김수호
+  { rate: 1.25, pitch: 0.2, volume: 0.8, lang: 'ko-KR', nameHints: ['male', 'man', '남성', 'InJoon'] },
+  // 임지우
+  { rate: 1.0, pitch: 1.4, volume: 0.8, lang: 'ko-KR', nameHints: ['female', 'woman', '여성', 'heami', 'sunhi']},
+  // 김도아
+  { rate: 0.85, pitch: 0.9, volume: 0.8, lang: 'ko-KR', nameHints: ['female', 'woman', '여성', 'heami', 'InJin']},
+  // 강동구
+  { rate: 1.1, pitch: 5.3, volume: 0.8, lang: 'ko-KR', nameHints: ['male', 'man', '남성', 'InJoon'] },
+];

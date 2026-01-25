@@ -107,11 +107,13 @@ export const MessageBubble = styled.div<{
   }
 
   .content {
+    position: relative;
     max-width: 70%;
     background: ${({ $isUser, theme }) =>
       $isUser ? theme.colors.primary : theme.colors.surface};
     color: ${({ theme }) => theme.colors.text};
     padding: ${({ theme }) => theme.spacing.md};
+    padding-right: ${({ $isUser, theme }) => $isUser ? theme.spacing.md : '40px'};
     border-radius: ${({ theme }) => theme.borderRadius.lg};
     ${({ $isUser }) =>
       $isUser ? 'border-top-right-radius: 4px;' : 'border-top-left-radius: 4px;'}
@@ -416,6 +418,46 @@ export const ResetButton = styled.button`
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.text};
+  }
+`;
+
+// Speaker Button for TTS
+export const SpeakerButton = styled.button<{ $isPlaying?: boolean; $color?: string }>`
+  position: absolute;
+  top: ${({ theme }) => theme.spacing.xs};
+  right: ${({ theme }) => theme.spacing.xs};
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: ${({ $isPlaying, $color, theme }) =>
+    $isPlaying ? ($color || theme.colors.primary) + '33' : 'transparent'};
+  border: 1px solid ${({ $isPlaying, $color, theme }) =>
+    $isPlaying ? ($color || theme.colors.primary) : theme.colors.border};
+  color: ${({ $isPlaying, $color, theme }) =>
+    $isPlaying ? ($color || theme.colors.primary) : theme.colors.textMuted};
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.fast};
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+    background: ${({ $color, theme }) => ($color || theme.colors.primary) + '22'};
+    border-color: ${({ $color, theme }) => $color || theme.colors.primary};
+    color: ${({ $color, theme }) => $color || theme.colors.primary};
+    transform: scale(1.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 

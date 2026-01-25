@@ -8,6 +8,7 @@ import { submitConfession } from '@/shares/axios';
 import { parseResponse } from '@/lib/parseResponse';
 import { useSequentialTyping, type ParsedMessage } from '@/hooks/useSequentialTyping';
 import { useModal } from '@/hooks/useModal';
+import { useSpeechSynthesis } from '@/hooks/useSpeechSynthesis';
 import {
   FriendProfileModal,
   TypingIndicator,
@@ -40,6 +41,7 @@ export default function ConfessionPage() {
   const [messages, setMessages] = useState<ParsedMessage[]>([]);
 
   const modal = useModal<number>();
+  const { speak, stop: stopSpeech, playingMessageId } = useSpeechSynthesis();
 
   const { renderedMessages, currentTypingFriendIndex, isComplete, reset: resetTyping } =
     useSequentialTyping(messages, {
@@ -96,6 +98,7 @@ export default function ConfessionPage() {
     setMessages([]);
     setErrors({});
     resetTyping();
+    stopSpeech();
   };
 
   const typingIndicator = renderedMessages.find((m) => m.status === 'typing-indicator');
@@ -150,7 +153,14 @@ export default function ConfessionPage() {
               {renderedMessages
                 .filter((m) => m.status === 'typing' || m.status === 'complete')
                 .map((m, i) => (
-                  <ChatMessage key={i} message={m} onAvatarClick={modal.open} />
+                  <ChatMessage
+                    key={i}
+                    message={m}
+                    messageId={i}
+                    onAvatarClick={modal.open}
+                    onSpeakerClick={speak}
+                    isPlaying={playingMessageId === i}
+                  />
                 ))}
               {typingIndicator && (
                 <TypingIndicator

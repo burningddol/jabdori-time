@@ -2,16 +2,19 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { FRIENDS } from '@/constants/friends';
+import { FRIENDS, FRIEND_COLORS } from '@/constants/friends';
 import type { RenderedMessage } from '@/hooks/useSequentialTyping';
-import { MessageBubble, ChatAvatarButton } from './styles';
+import { MessageBubble, ChatAvatarButton, SpeakerButton } from './styles';
 
 interface Props {
   message: RenderedMessage;
+  messageId: number;
   onAvatarClick?: (index: number) => void;
+  onSpeakerClick?: (text: string, friendIndex: number, messageId: number) => void;
+  isPlaying?: boolean;
 }
 
-export function ChatMessage({ message, onAvatarClick }: Props) {
+export function ChatMessage({ message, messageId, onAvatarClick, onSpeakerClick, isPlaying }: Props) {
   const [pop, setPop] = useState(false);
   const prevStatus = useRef(message.status);
 
@@ -25,7 +28,15 @@ export function ChatMessage({ message, onAvatarClick }: Props) {
   }, [message.status]);
 
   const isTyping = message.status === 'typing';
+  const isComplete = message.status === 'complete';
   const friend = FRIENDS[message.friendIndex];
+  const friendColor = FRIEND_COLORS[message.friendIndex];
+
+  const handleSpeakerClick = () => {
+    if (onSpeakerClick && isComplete) {
+      onSpeakerClick(message.fullText, message.friendIndex, messageId);
+    }
+  };
 
   return (
     <MessageBubble $friendIndex={message.friendIndex} $pop={pop}>
@@ -43,6 +54,17 @@ export function ChatMessage({ message, onAvatarClick }: Props) {
           {isTyping ? message.typedText : message.fullText}
           {isTyping && <span className="cursor" />}
         </div>
+        {isComplete && onSpeakerClick && (
+          <SpeakerButton
+            onClick={handleSpeakerClick}
+            $isPlaying={isPlaying}
+            $color={friendColor}
+            aria-label={isPlaying ? '음성 정지' : '음성으로 듣기'}
+            title={isPlaying ? '정지' : '음성으로 듣기'}
+          >
+            {isPlaying ? '⏹' : '🔊'}
+          </SpeakerButton>
+        )}
       </div>
     </MessageBubble>
   );
