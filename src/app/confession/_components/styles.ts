@@ -144,6 +144,22 @@ export const MessageBubble = styled.div<{
     animation: ${pulse} 0.8s ease-in-out infinite;
     vertical-align: text-bottom;
   }
+
+  .myName  {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.75rem;
+    color: 0;
+    font-weight: 600;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
+  }
+
+  .imgWrapper {
+    width:36px;
+    height:36px;
+    border-radius: 50%;
+  overflow: hidden;
+  }
 `;
 
 export const TypingBubble = styled.div<{ $friendIndex: number }>`

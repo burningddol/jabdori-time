@@ -1,5 +1,6 @@
 'use client';
-
+import placeHolder from "@/assets/placeholeder.png";
+import Image from "next/image";
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { confessionSchema, type ConfessionFormData } from '@/lib/validation';
@@ -129,12 +130,18 @@ export default function ConfessionPage() {
         ) : (
           <>
             <MessageBubble $isUser>
-              <div className="avatar">🙈</div>
+              <div className="imgWrapper">
+                <Image src={placeHolder} width={36} height={36} alt="프로필" />
+              </div>
               <div className="content">
                 <div className="text">
-                  <strong>Task:</strong> {formData.task}
+                  <div className='myName'>{formData.name}</div>
+                  <strong>해야했던 일:</strong> {formData.task}
                   <br />
-                  <strong>Excuse:</strong> {formData.excuse}
+                  <strong>변명:</strong> {formData.excuse}
+                  <br />
+                  <br />
+                  <div>미안해.. 오늘도 못했어..</div>
                 </div>
               </div>
             </MessageBubble>
@@ -153,7 +160,7 @@ export default function ConfessionPage() {
               )}
             </ResponseArea>
 
-            {isComplete && <ResetButton onClick={handleReset}>다른 잘못을 자백하러가기</ResetButton>}
+            {isComplete && <ResetButton onClick={handleReset}>다른 잘못을 자백하러 가기</ResetButton>}
           </>
         )}
       </ChatArea>
