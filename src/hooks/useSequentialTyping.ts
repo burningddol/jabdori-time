@@ -22,7 +22,7 @@ interface Config {
   interMessageDelay: number;
 }
 
-const DEFAULT: Config = {
+const DEFAULT_CONFIG: Config = {
   baseSpeed: 30,
   jitter: 15,
   punctuationDelay: 150,
@@ -32,37 +32,42 @@ const DEFAULT: Config = {
 
 const PUNCTUATION = '.!?,…。！？，';
 
-function rand(min: number, max: number) {
+function rand(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function charDelay(char: string, cfg: Config) {
-  let d = cfg.baseSpeed + rand(-cfg.jitter, cfg.jitter);
-  if (PUNCTUATION.includes(char)) d += cfg.punctuationDelay;
-  if (char === '\n') d += cfg.punctuationDelay * 1.5;
-  return Math.max(d, 10);
+function getCharDelay(char: string, cfg: Config): number {
+  let delay = cfg.baseSpeed + rand(-cfg.jitter, cfg.jitter);
+  if (PUNCTUATION.includes(char)) delay += cfg.punctuationDelay;
+  if (char === '\n') delay += cfg.punctuationDelay * 1.5;
+  return Math.max(delay, 10);
 }
 
 export function useSequentialTyping(
   messages: ParsedMessage[],
   options: Partial<Config> = {}
 ) {
-  const cfg = { ...DEFAULT, ...options };
   const [rendered, setRendered] = useState<RenderedMessage[]>([]);
   const [typingFriend, setTypingFriend] = useState<number | null>(null);
   const [done, setDone] = useState(false);
 
-  const idx = useRef(0);
-  const charIdx = useRef(0);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const data = useRef<ParsedMessage[]>([]);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cfgRef = useRef<Config>({ ...DEFAULT_CONFIG, ...options });
 
-  const clear = useCallback(() => {
-    if (timer.current) clearTimeout(timer.current);
+  useEffect(() => {
+    cfgRef.current = { ...DEFAULT_CONFIG, ...options };
+  }, [options]);
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
   }, []);
 
   useEffect(() => {
-    clear();
+    clearTimer();
+
     if (!messages.length) {
       setRendered([]);
       setTypingFriend(null);
@@ -70,73 +75,91 @@ export function useSequentialTyping(
       return;
     }
 
-    data.current = messages;
-    idx.current = 0;
-    charIdx.current = 0;
-    setDone(false);
-    setRendered(messages.map(m => ({
-      friendIndex: m.friendIndex,
-      fullText: m.text,
-      typedText: '',
-      status: 'pending',
-    })));
+    const cfg = cfgRef.current;
+    let msgIndex = 0;
+    let charIndex = 0;
 
-    const updateStatus = (i: number, status: TypingStatus, text?: string) => {
-      setRendered(prev => prev.map((m, j) =>
-        j === i ? { ...m, status, ...(text !== undefined && { typedText: text }) } : m
-      ));
+    setDone(false);
+    setRendered(
+      messages.map((m) => ({
+        friendIndex: m.friendIndex,
+        fullText: m.text,
+        typedText: '',
+        status: 'pending' as TypingStatus,
+      }))
+    );
+
+    const updateMessage = (index: number, status: TypingStatus, typedText?: string) => {
+      setRendered((prev) =>
+        prev.map((m, i) =>
+          i === index
+            ? { ...m, status, ...(typedText !== undefined && { typedText }) }
+            : m
+        )
+      );
     };
 
-    const typeChar = () => {
-      const i = idx.current;
-      const msg = data.current[i];
+    const typeNextChar = () => {
+      const msg = messages[msgIndex];
       if (!msg) return;
 
-      const c = charIdx.current;
-      if (c < msg.text.length) {
-        charIdx.current++;
-        updateStatus(i, 'typing', msg.text.slice(0, c + 1));
-        timer.current = setTimeout(typeChar, charDelay(msg.text[c] || '', cfg));
+      if (charIndex < msg.text.length) {
+        const char = msg.text[charIndex];
+        charIndex++;
+        updateMessage(msgIndex, 'typing', msg.text.slice(0, charIndex));
+        timerRef.current = setTimeout(typeNextChar, getCharDelay(char, cfg));
       } else {
-        updateStatus(i, 'complete');
-        timer.current = setTimeout(nextMsg, cfg.interMessageDelay);
+        updateMessage(msgIndex, 'complete');
+        timerRef.current = setTimeout(advanceToNextMessage, cfg.interMessageDelay);
       }
     };
 
-    const startTyping = () => {
-      charIdx.current = 0;
-      updateStatus(idx.current, 'typing');
-      timer.current = setTimeout(typeChar, 50);
+    const startTypingMessage = () => {
+      charIndex = 0;
+      updateMessage(msgIndex, 'typing');
+      timerRef.current = setTimeout(typeNextChar, 50);
     };
 
-    const showIndicator = () => {
-      const msg = data.current[idx.current];
+    const showTypingIndicator = () => {
+      const msg = messages[msgIndex];
       if (!msg) return;
+
       setTypingFriend(msg.friendIndex);
-      updateStatus(idx.current, 'typing-indicator');
-      timer.current = setTimeout(startTyping, rand(cfg.typingIndicatorDuration[0], cfg.typingIndicatorDuration[1]));
+      updateMessage(msgIndex, 'typing-indicator');
+
+      const indicatorDuration = rand(
+        cfg.typingIndicatorDuration[0],
+        cfg.typingIndicatorDuration[1]
+      );
+      timerRef.current = setTimeout(startTypingMessage, indicatorDuration);
     };
 
-    const nextMsg = () => {
-      idx.current++;
-      if (idx.current >= data.current.length) {
+    const advanceToNextMessage = () => {
+      msgIndex++;
+      if (msgIndex >= messages.length) {
         setTypingFriend(null);
         setDone(true);
         return;
       }
-      showIndicator();
+      showTypingIndicator();
     };
 
-    timer.current = setTimeout(showIndicator, 100);
-    return clear;
-  }, [messages, clear]);
+    timerRef.current = setTimeout(showTypingIndicator, 100);
+
+    return clearTimer;
+  }, [messages, clearTimer]);
 
   const reset = useCallback(() => {
-    clear();
+    clearTimer();
     setRendered([]);
     setTypingFriend(null);
     setDone(false);
-  }, [clear]);
+  }, [clearTimer]);
 
-  return { renderedMessages: rendered, currentTypingFriendIndex: typingFriend, isComplete: done, reset };
+  return {
+    renderedMessages: rendered,
+    currentTypingFriendIndex: typingFriend,
+    isComplete: done,
+    reset,
+  };
 }
