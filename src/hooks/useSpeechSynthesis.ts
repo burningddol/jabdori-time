@@ -48,8 +48,9 @@ export function useSpeechSynthesis(): UseSpeechSynthesisReturn {
       stop();
 
       const profile = VOICE_PROFILES[friendIndex] ?? VOICE_PROFILES[0];
-      tts.speak(text, profile, () => setPlayingMessageId(null));
       setPlayingMessageId(messageId);
+      tts.speak(text, profile, () => setPlayingMessageId(null));
+      
     },
     [playingMessageId, stop]
   );

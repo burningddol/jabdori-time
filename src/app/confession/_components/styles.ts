@@ -213,12 +213,12 @@ export const TypingBubble = styled.div<{ $friendIndex: number }>`
 `;
 
 // Avatar Buttons
-export const FriendAvatarButton = styled.button<{ $color: string; $active?: boolean }>`
+export const FriendAvatarButton = styled.button<{  $active?: boolean }>`
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: ${({ $color }) => $color}22;
-  border: 2px solid ${({ $color, $active }) => ($active ? $color : 'transparent')};
+  
+  border: 2px solid ${({  $active }) => ($active ? "white" : 'transparent')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -240,7 +240,7 @@ export const FriendAvatarButton = styled.button<{ $color: string; $active?: bool
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline: 2px solid white;;
     outline-offset: 2px;
   }
 `;

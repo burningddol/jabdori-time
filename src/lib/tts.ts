@@ -89,8 +89,10 @@ export function speak(
   
   if (voice) {
     utterance.voice = voice;
-  } else {
+  } 
+  if(!voice) {
     stop();
+    onEnd?.();
     return alert("크롬은 남성보이스를 지원하지 않아요. EDGE로 가세여"); //보이스 없음
   }
 

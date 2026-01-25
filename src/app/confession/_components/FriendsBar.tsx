@@ -15,7 +15,7 @@ export function FriendsBar({ currentTypingFriendIndex, onFriendClick }: Props) {
       {FRIENDS.map((friend, i) => (
         <FriendAvatarButton
           key={i}
-          $color={FRIEND_COLORS[i]}
+        
           $active={currentTypingFriendIndex === i}
           onClick={() => onFriendClick(i)}
           aria-label={`${friend.name} 프로필 보기`}
