@@ -482,6 +482,8 @@ export const ModalPanel = styled.div<{ $color: string }>`
   padding: ${({ theme }) => theme.spacing.xl};
   max-width: 360px;
   width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   z-index: 1001;
   animation: ${modalSlideUp} 0.25s ease;
 
