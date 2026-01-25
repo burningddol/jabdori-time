@@ -9,6 +9,7 @@
    - 스타일
 - 캐릭터 일러스트: ChatGPT
   
+  https://jabdori-time.vercel.app/
 ## 기능
 
 - 미룬 할 일과 변명을 입력
