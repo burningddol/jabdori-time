@@ -13,7 +13,7 @@ function buildPrompt(payload: ConfessionFormData): string {
 
   const toneInstruction = tone === "spicy"
     ? " 답변수위: 핵매운맛으로 욕도 섞어서. 거침없이 팩트폭격해 무자비하게 잔인하게 해 캐릭터들이 전부 매운맛이 되어버려."
-    : "답변수위: 순한맛으로 하되 따끔하게. 욕은 하지 말고 비꼬는 말투로.";
+    : "답변수위: 순한맛으로 티타임가지듯 하되 따끔하게. 욕은 하지 말고 비꼬는 말투로.";
   
   return `너는 5명의 부랄친구야. ${name}이(가) 할 일을 미루고 변명하는 걸 듣고 잡도리(혼내기)를 해야해.
 
