@@ -108,7 +108,7 @@ export default function ConfessionPage() {
       <Header>
         <BackButton onClick={() => router.push('/')}>← Back</BackButton>
         <Title>
-          JABDORI TIME<span>~</span>
+          JABDORI TIME<span>!</span>
         </Title>
         <div style={{ width: 60 }} />
       </Header>

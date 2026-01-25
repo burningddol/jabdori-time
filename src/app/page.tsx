@@ -167,10 +167,10 @@ export default function LandingPage() {
       <BackgroundGlow />
 
       <Logo>
-        JABDORI TIME<span>~</span>
+        JABDORI TIME<span>!</span>
       </Logo>
 
-      <BubblesContainer>
+      <BubblesContainer> 
         {SPEECH_BUBBLES.map((text, index) => (
           <SpeechBubble
             key={index}

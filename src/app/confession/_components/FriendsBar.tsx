@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { FRIENDS, FRIEND_COLORS } from '@/constants/friends';
+import { FRIENDS} from '@/constants/friends';
 import { FriendsBarWrapper, FriendAvatarButton } from './styles';
 
 interface Props {
