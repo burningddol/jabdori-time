@@ -156,7 +156,7 @@ export default function LandingPage() {
     SPEECH_BUBBLES.forEach((_, index) => {
       setTimeout(() => {
         setVisibleBubbles((prev) => [...prev, index]);
-      }, 200 + index * 600);
+      }, 50 + index * 600);
     });
   }, []);
 
