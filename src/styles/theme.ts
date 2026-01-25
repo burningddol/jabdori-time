@@ -11,7 +11,7 @@ export const theme = {
     error: '#ff4757',
   },
   fonts: {
-    primary: "'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+    primary: "  system-ui",
   },
   spacing: {
     xs: '4px',
