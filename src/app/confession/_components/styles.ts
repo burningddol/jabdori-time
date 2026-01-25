@@ -487,6 +487,13 @@ export const ModalPanel = styled.div<{ $color: string }>`
   z-index: 1001;
   animation: ${modalSlideUp} 0.25s ease;
 
+  /* 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
   &::before {
     content: '';
     position: absolute;
@@ -535,7 +542,7 @@ export const ModalProfileImage = styled.div`
   transform: scale(1.215);
   position: relative;
   overflow: hidden;
-  margin: 3.8px auto ${({ theme }) => theme.spacing.xxl};
+  margin: 3.3px auto ${({ theme }) => theme.spacing.xxl};
   
 `;
 
