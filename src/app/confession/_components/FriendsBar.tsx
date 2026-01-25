@@ -21,7 +21,7 @@ export function FriendsBar({ currentTypingFriendIndex, onFriendClick }: Props) {
           aria-label={`${friend.name} 프로필 보기`}
         >
           <div className="avatar">
-            <Image src={friend.profile} width={48} height={48} alt={`${friend.name} 프로필`} />
+            <Image src={friend.profile} width={48} height={48} alt={`${friend.name} 프로필`} priority />
           </div>
         </FriendAvatarButton>
       ))}

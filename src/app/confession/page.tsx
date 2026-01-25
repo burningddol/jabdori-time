@@ -131,7 +131,7 @@ export default function ConfessionPage() {
           <>
             <MessageBubble $isUser>
               <div className="imgWrapper">
-                <Image src={placeHolder} width={36} height={36} alt="프로필" />
+                <Image src={placeHolder} width={36} height={36} alt="프로필" priority/>
               </div>
               <div className="content">
                 <div className="text">
