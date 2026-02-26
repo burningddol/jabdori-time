@@ -70,6 +70,7 @@ export default function ConfessionPage() {
     const result = confessionSchema.safeParse(formData);
 
     if (!result.success) {
+      console.log(result.error.issues);
       const fieldErrors: FormErrors = {};
       result.error.issues.forEach((err) => {
         fieldErrors[err.path[0] as keyof FormErrors] = err.message;

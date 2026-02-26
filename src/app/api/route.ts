@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
 
     const res = await cerebras.chat.completions.create({
       messages: [{ role: "user", content: message }],
-      model: 'llama-3.3-70b',
+      model: "llama3.1-8b",
       max_completion_tokens: 1000,
       temperature: 0.2,
       top_p: 0.95,
